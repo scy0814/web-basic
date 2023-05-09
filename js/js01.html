@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+       
+        const name = prompt("이름을 입력해주세요")
+        if (name == null || name.length == 0){
+            name = prompt("다시 입력해 주세요");
+        }
+        if(typeof name == 'string'){
+            console.log(name + "님 안녕하세요");
+        }
+    </script>
+    <div onclick="javascript:start()">버튼입니다</div>
+</body>
+</html>

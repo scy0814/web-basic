@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <style>
+        h1 {
+            margin-left: 54px;
+            font-size: 60px;
+            color:rgb(29, 184, 24);
+
+        }
+    </style>
+    <h1 style="font-size:70px;"><strong>NAVER</strong></h1>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="">
+    <b>아이디<br><br></b>
+        <input type="text" style="width: 300px ; height:40px"><br><br>
+        <b>비밀번호<br><br>
+        <input type="text" style="width: 300px ; height:40px"><br><br>
+        <b>비밀번호 재확인<br><br>
+        <input type="text" style="width: 300px ; height:40px"><br><br>
+        <b>이름<br><br>
+        <input type="text" style="width: 300px ; height:40px"><br><br>
+        <b>생년월일<br><br>
+            <label for="year"></label>
+		<input type="text" style = "height : 30px" id="year" name="year" maxlength="4" size="10">
+
+		<label for="month"></label>
+        <select id="month" name="month" style ="width : 100px; height : 35px">
+			<option value="00">월</option>
+			<option value="01">1월</option>
+			<option value="02">2월</option>
+			<option value="03">3월</option>
+			<option value="04">4월</option>
+			<option value="05">5월</option>
+			<option value="06">6월</option>
+			<option value="07">7월</option>
+			<option value="08">8월</option>
+			<option value="09">9월</option>
+			<option value="10">10월</option>
+			<option value="11">11월</option>
+			<option value="12">12월</option>
+		</select>
+		<!-- <input type="text" style = "height : 30px" id="month" name="month" maxlength="2" size="9"> -->
+
+		<label for="day"></label>
+		<input type="text" style = "height : 30px" id="day" name="day" maxlength="2" size="8.5">
+            <!-- <input type="text" style="width: 300px ; height:40px"><br><br> -->
+        <br><br>
+        성별 <br><br>
+        <label for="gender"></label>
+        <select id="gender" name="gender" style="width: 308px ; height:40px">
+			<option value="00">성별</option>
+			<option value="01">남자</option>
+			<option value="02">여자</option>
+			<option value="03">선택안함</option>
+        </select>
+        <br><br>본인 확인 이메일(선택) <br><br>
+        <input type="text" style="width: 300px ; height:40px"><br><br>
+        휴대전화 <br><br>
+        <label for="phoneNo"></label>
+        <select id="phoneNo" name="phoneNo" style="width: 308px ; height:40px">
+			<option value="00">대한민국 +82</option>
+			<option value="01">가나 +233</option>
+			<option value="02">가봉 +241</option>
+			<option value="03">가이아나 +592</option>
+        </select><br><br>
+        <label for="phone"></label>
+		<input type="text" id="phone" name="phone" placeholder="전화번호 입력" style="width: 200px ; height:35px">
+
+		<input type="submit" value="인증번호 받기" style="width: 95px ; height:40px ; background-color: #12f857;">
+        <br><br>
+        <input type="number" id="autocode" name="autocode" placeholder="인증번호를 입력하세요" style="width: 300px ; height:40px"><br><br>
+		<input type="submit" value="가입하기" style="width: 308px ; height:40px ; background-color: #12f857;">
+        
+</body>
+</html>
