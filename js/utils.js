@@ -25,7 +25,26 @@ function checkName(name) {
     alert("다시입력해 주세요.");
     start();
   } else {
-    console.    log(name);
+    console.log(name);
     alert(name + "님 안녕하세요.");
   }
+}
+
+
+function num() {
+  let num = prompt("숫자를 입력해주세요");
+  while(isNaN(num)){
+    num = prompt("숫자를 다시 입력해주세요");
+  }
+  if(num < 1 || num > 100) {
+    num = prompt("1이상 100이하를 넣어주세요");
+  }else{
+    for(num = 1; num <= 100 ; num++){
+      console.log(num);
+      if (num === 100) {
+        alert("완료되었습니다.");
+      }
+    }
+  }
+
 }
