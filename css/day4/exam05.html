@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .button_class{
+            background-color: rgb(117, 115, 115);
+            color: white;
+            width: 200px;
+            height: 80px;
+        }
+       
+    </style>
+    <script>
+        function changeColor(id){
+            let button = document.getElementById(id);
+            button.style.backgroundColor = 'white';
+            button.style.color = 'black';
+        }
+        function returnColor(id){
+            let button = document.getElementById(id);
+            button.style.backgroundColor = "";
+            button.style.color = "";
+        }
+    </script>
+</head>
+<body>
+    <button id="button1" class="button_class" onmouseover="changeColor('button1')" onmouseleave="returnColor('button1')"><h1>html</h1></button>
+    <button id="button2" class="button_class" onmouseover="changeColor('button2')" onmouseleave="returnColor('button2')"><h1>css</h1></button>
+    <button id="button3" class="button_class" onmouseover="changeColor('button3')" onmouseleave="returnColor('button3')"><h1>javascript</h1></button>
+</body>
+</html>

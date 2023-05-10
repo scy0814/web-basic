@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>버튼 3개</title>
+</head>
+<body>
+    <script>
+        let text = prompt('텍스트를 입력해주세요.');  
+        while(text === null || text === ""){
+            text = prompt('텍스트값을 입력해주세요');
+        }
+        let div = document.createElement('div');
+        div.textContent = text;
+        div.id = 'text';
+        document.body.appendChild(div);
+
+        function changeColor(color,colorName){
+        let text = document.getElementById('text');
+            text.style.color = color;
+            alert(`${colorName}색으로 변경됩니다`);
+        }
+    </script>
+
+    <button onclick="changeColor('red', '빨강')">빨강</button>
+    <button onclick="changeColor('blue', '파란')">파랑</button>
+    <button onclick="changeColor('green', '초록')">초록</button>
+</body>
+</html>

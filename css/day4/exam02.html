@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+  let num = prompt("숫자를 입력해주세요");
+  while(isNaN(num)){
+    num = prompt("숫자를 다시 입력해주세요");
+  }
+  while(num < 1 || num > 100) {
+    num = prompt("1이상 100이하를 넣어주세요");
+  }
+    for(num = 1; num <= 100 ; num++){
+      console.log(num);
+      if (num === 100) {
+        alert("완료되었습니다.");
+      }
+    }
+  
+
+
+    </script>
+</body>
+</html>

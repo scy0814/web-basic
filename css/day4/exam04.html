@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .menu {
+            background-color: rgb(117, 115, 115);
+            width: 200px;
+            height: 80px;
+            color: white;
+        }
+        .menu.active {
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let prevSelected = null;
+        function selectMenu(id) {
+            let button = document.getElementById(id);
+            if (prevSelected) {
+                prevSelected.classList.remove("active");
+            }
+            button.classList.add("active");
+            prevSelected = button;
+        }
+    </script>
+    <button id="button1" class="menu" onclick="selectMenu('button1')"><h1>html</h1></button>
+    <button id="button2" class="menu" onclick="selectMenu('button2')"><h1>css</h1></button>
+    <button id="button3" class="menu" onclick="selectMenu('button3')"><h1>javascript</h1></button>
+</body>
+</html>
