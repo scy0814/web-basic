@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+    crossorigin="anonymous"></script>
+
+    <script>
+     $(document).ready(function() {
+            $("#cancel").click(function() {
+                // 초기화 작업
+                $("#id").val("");
+                $("#password").val("");
+                $("#male").prop("checked", false);
+                $("#female").prop("checked", false);
+                $("#job").val("");
+                $("#develope").prop("checked", false);
+                $("#game").prop("checked", false);
+                $("#fishing").prop("checked", false);
+                $("#exercise").prop("checked", false);
+                $("#reading").prop("checked", false);
+                $("#music").prop("checked", false);
+            });
+
+            $("#add").click(function() {
+                let id = $("#id").val();
+                let password = $("#password").val();
+                let gender = $("input[name='gender']:checked").length;
+                let job = $("#jobSelect").val();
+                let hobbyCount = $("input[type='checkbox']:checked").length;
+
+                if (id === "") {
+                    alert("아이디를 입력해주세요.");
+                    return;
+                }
+
+                // 이메일 형식 체크
+                var emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (!emailRegex.test(id)) {
+                    alert("유효한 이메일 형식이 아닙니다.");
+                    return;
+                }
+
+                if (password.length < 5) {
+                    alert("비밀번호는 5자 이상이어야 합니다.");
+                    return;
+                }
+
+                if (gender === 0) {
+                    alert("성별을 선택해주세요.");
+                    return;
+                }
+
+                if (job === "") {
+                    alert("직업을 선택해주세요.");
+                    return;
+                }
+
+                if (hobbyCount < 3) {
+                    alert("취미는 3개 이상 선택해야 합니다.");
+                    return;
+                }
+
+                // 모든 조건이 충족되면 회원가입 완료 메시지 출력
+                alert("회원가입이 완료되었습니다.");
+            });
+        });
+    </script>
+    <style>
+       #base1{
+        position: absolute;
+        left: 80px;
+        top: 8px;
+       }
+    </style>
+</head>
+<body>
+    <div>
+        아이디 <br><br>
+        비밀번호 <br><br>
+        성별 <br><br>
+        직업 <br><br><br>
+        취미
+        
+    </div>
+    <div id="base1">
+       <input  type="text" id="id"> <br><br>
+     <input  type="password" id="password"> <br><br>
+         <input  type="radio" name="gender" id="male">남자<input type="radio" name="gender" id="female"> 여자 <br><br>
+         <label  for="jobSelect" id="job"></label>
+    <select name="job" id="job" style ="width : 100px; height : 35px">
+        <option value="00"></option>
+        <option value="01">배우</option>
+        <option value="02">회사원</option>
+        <option value="03">드림관</option>
+        <option value="04">한울관</option>
+    </select> <br><br>
+       <input  type="checkbox" id="develope">개발
+            <input type="checkbox" id="game">게임
+            <input type="checkbox" id="fishing">낚시 <br>
+            <input  type="checkbox" id="exercise">운동
+            <input type="checkbox" id="read">독서
+            <input type="checkbox" id="music">음악감상 <br><br>
+            <button id="cancel">취소</button>
+            <button id="add">회원가입</button>
+    </div>
+</body>
+</html>

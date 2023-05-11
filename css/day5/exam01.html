@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>버튼 3개</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+    crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div id="text-container"></div>
+
+    <button id="red-button">빨강</button>
+    <button id="blue-button">파랑</button>
+    <button id="green-button">초록</button>
+
+    <script>
+        $(function(){
+            let text = prompt('텍스트를 입력해주세요.');
+
+            while(text === null || text === ""){
+                text = prompt('텍스트값을 입력해주세요');
+            }
+
+            $('#text-container').text(text);
+
+            function changeColor(color, colorName) {
+                $('#text-container').css('color', color);
+                alert(`${colorName}색으로 변경됩니다`);
+            }
+
+            $('#red-button').click(function() {
+                changeColor('red', '빨강');
+            });
+
+            $('#blue-button').click(function() {
+                changeColor('blue', '파랑');
+            });
+
+            $('#green-button').click(function() {
+                changeColor('green', '초록');
+            });
+        });
+    </script>
+</body>
+</html>

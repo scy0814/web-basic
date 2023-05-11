@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.js"
+      integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+$(document).ready(function() {
+  $("#checkbox1").click(function() {
+    var isChecked = $(this).prop("checked");
+    $("input[type='checkbox']").prop("checked", isChecked);
+  });
+
+  $("#button").click(function() {
+    let checkedTitles = [];
+    $("input[type='checkbox']:checked").each(function() {
+      let title = $(this).closest("tr").find("#title").text();
+      checkedTitles.push(title);
+    });
+
+    if (checkedTitles.length > 0) {
+      console.log("선택된 제목: " + checkedTitles.join(", "));
+    } else {
+      console.log("선택된 항목이 없습니다.");
+    }
+  });
+});
+    </script>
+    <style>
+        table, th, td {
+          border: 1px solid black;
+          border-collapse: collapse;
+        }
+        #checkbox{
+            position: relative;
+            left: 15px;
+        }
+        #title{
+            text-align: center;
+        }
+        #time{
+            text-align: center;
+        }
+        #button{
+            position: absolute;
+            width: 100px;
+            height: 30px;
+            top: 180px;
+            left: 138px;
+        }
+    </style>
+</head>
+<body>
+    <table id="table">
+   <tr>
+    <td ><input id="checkbox1" class="ch" type="checkbox">확인</td>
+    <td id="title" width="100px">제목</td>
+    <td id="time">글쓴 시간</td>
+   </tr>
+   <tr>
+    <td ><input id="checkbox" type="checkbox"></td>
+    <td id="title">1111</td>
+    <td id="time">11:11:00</td>
+   </tr>
+   <tr>
+    <td><input id="checkbox" type="checkbox"></td>
+    <td id="title">2222</td>
+    <td id="time">11:11:00</td>
+   </tr>
+   <tr>
+    <td><input id="checkbox" type="checkbox"></td>
+    <td id="title">3333</td>
+    <td id="time">11:11:00</td>
+   </tr>
+   <tr>
+    <td><input id="checkbox" type="checkbox"></td>
+    <td id="title">4444</td>
+    <td id="time">11:11:00</td>
+   </tr>
+   <tr>
+    <td><input id="checkbox" type="checkbox"></td>
+    <td id="title">5555</td>
+    <td id="time">11:11:00</td>
+   </tr>
+   <tr>
+    <td><input id="checkbox" type="checkbox"></td>
+    <td id="title">6666</td>
+    <td id="time">11:11:00</td>
+   </tr>
+<button id="button">로그</button>
+</body>
+</html>
