@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.js"
+      integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+
+  $(function(){
+    const circle = $('#circle');
+    const enemy = $('#enemy');
+    const scoreElement = $('#score');
+    const skill = $('#skill');
+    let gameInterval;
+    let isJumping = false;
+    let isGameOver = false;
+    let score = 0;
+    let isSkillVisible = false;
+    let isSkillActivated = false;
+
+    gameStart();
+
+    function gameStart(){
+        setKeyboardEvent();
+        enemyStart();
+        checkCollision();
+        skill.hide();
+    }
+
+    function enemyStart() {
+        const randomSpeed = Math.floor(Math.random() * 2000) + 1000; // 랜덤 속도 설정 (1초에서 3초 사이)
+        const randomPosition = Math.floor(Math.random() * 400) + 100; // 랜덤 위치 설정 (100px에서 500px 사이)
+        // 적이 오른쪽에서 왼쪽으로 이동
+        enemy.animate({ right: '1000px' }, randomSpeed, function() {
+            enemy.css("right","0");
+            if (!isGameOver) {
+                enemyStart();
+            }
+        });
+    }
+
+    function jump(){
+        if (isJumping) return;
+        isJumping = true;
+        circle.animate({bottom : '+=100px'},'fast').animate({bottom: '-=100px'},function(){
+            isJumping = false ;
+        });
+    }
+
+    function setKeyboardEvent(){
+        $('html').keydown(function (e) {
+            switch (e.key) {
+                case " " :
+                    jump();
+                    break;
+                case "q":
+                    toggleSkill();
+                    break;
+            }
+        });
+    }
+
+    function toggleSkill() {
+    if (!isGameOver) {
+      if (isSkillVisible && !isSkillActivated) {
+        skill.hide();
+        isSkillVisible = false;
+      } else if (!isSkillVisible) {
+        skill.show();
+        isSkillVisible = true;
+        moveSkill();
+        isSkillActivated = true;
+      }
+    }
+  }
+    function moveSkill() {
+        if (isSkillVisible) {
+            const skillPosition = skill.position();
+            const containerWidth = $('#container').width();
+
+            skill.animate({ left: containerWidth + 'px' }, 2000, function() {
+                skill.css('left', '-50px');
+                // moveSkill();
+            });
+        }
+    }
+
+    let obstaclePassed = false;
+
+    function checkCollision() {
+        gameInterval = setInterval(function() {
+            const circlePosition = circle.position();
+            const enemyPosition = enemy.position();
+            const circleWidth = circle.width();
+            const enemyWidth = enemy.width();
+            const enemyHeight = enemy.height();
+
+            if (
+                circlePosition.left + circleWidth >= enemyPosition.left &&
+                circlePosition.left <= enemyPosition.left + enemyWidth &&
+                circlePosition.top + circleWidth >= enemyPosition.top &&
+                circlePosition.top <= enemyPosition.top + enemyHeight
+            ) {
+                clearInterval(gameInterval);
+                isGameOver = true;
+                alert("Circle이 적에게 닿았습니다! 게임 오버입니다.");
+
+                const restart = confirm("게임을 다시 시작하시겠습니까?");
+                if (restart) {
+                    resetGame();
+                }
+            } else if (
+                circlePosition.left > enemyPosition.left + enemyWidth &&
+                !obstaclePassed
+            ) {
+                obstaclePassed = true;
+                increaseScore(100);
+            } else if (circlePosition.left < enemyPosition.left) {
+                obstaclePassed = false;
+            }
+        }, 10);
+    }
+
+    function increaseScore(points) {
+        score += points;
+        scoreElement.text("점수: " + score);
+    }
+
+    function resetGame() {
+        isGameOver = false;
+        circle.css("bottom", "0");
+        score = 0;
+            scoreElement.text("점수: " + score);
+            gameStart();
+        }
+    });
+    </script>
+    <style>
+        #container {
+          position: absolute;
+          width: 1000px;
+          height: 600px;
+          border: 1px black solid;
+          left: 500px;
+          top: 100px;
+        }
+        #circle {
+          position: absolute;
+          left: 50px;
+          width: 60px;
+          bottom: 100px;
+          border: 1px;
+        }
+        #enemy {
+            position: absolute;
+            width: 50px;
+            right: 0px;
+            bottom: 0px; 
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+        }
+        #skill{
+            position: absolute;
+            left: 80px;
+            width: 50px;
+            bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <img id="circle" src="images/동그라미.jpg" alt="" />
+        <img id="enemy" src="images/미사일.jpg" alt="" />
+        <img id="skill" src="images/스킬.jpg" alt="" />
+        <h3 id="score">점수: 0</h3>
+    </div>
+</body>
+</html>

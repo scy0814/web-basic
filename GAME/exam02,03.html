@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.js"
+      integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+        $(function(){
+            const circle = $('#circle');
+            const enemy = $('#enemy');
+            let gameInterval;
+            let isJumping = false;
+            let isGameOver = false;
+    
+            gameStart();
+    
+            function gameStart(){
+                setKeyboardEvent();
+                enemyStart();
+                checkCollision();
+            }
+    
+            function enemyStart() {
+                const randomSpeed = Math.floor(Math.random() * 2000) + 1000; // 랜덤 속도 설정 (1초에서 3초 사이)
+                const randomPosition = Math.floor(Math.random() * 400) + 100; // 랜덤 위치 설정 (100px에서 500px 사이)
+                // 적이 오른쪽에서 왼쪽으로 이동
+                enemy.animate({ right: '720px' }, randomSpeed, function() {
+                    enemy.css("right","0");
+                    if (!isGameOver) {
+                        enemyStart();
+                    }
+                });
+            }
+    
+            function jump(){
+                if (isJumping) return;
+                isJumping = true;
+                circle.animate({bottom : '+=150px'},'fast').animate({bottom: '-=150px'},function(){
+                    isJumping = false ;
+                });
+            }
+    
+            function setKeyboardEvent(){
+                $('html').keydown(function (e) {
+                    switch (e.key) {
+                        case " " :
+                            jump();
+                            break;
+                    }
+                });
+            }
+    
+            function checkCollision() {
+                gameInterval = setInterval(function() {
+                    const circlePosition = circle.position();
+                    const enemyPosition = enemy.position();
+                    const circleWidth = circle.width();
+                    const enemyWidth = enemy.width();
+                    const enemyHeight = enemy.height();
+    
+                    if (
+                        circlePosition.left + circleWidth >= enemyPosition.left &&
+                        circlePosition.left <= enemyPosition.left + enemyWidth &&
+                        circlePosition.top + circleWidth >= enemyPosition.top &&
+                        circlePosition.top <= enemyPosition.top + enemyHeight
+                    ) {
+                        clearInterval(gameInterval);
+                        isGameOver = true;
+                        alert("Circle이 적에게 닿았습니다! 게임 오버입니다.");
+    
+                            resetGame();
+                        
+                    }
+                }, 10);
+            }
+    
+            function resetGame() {
+                isGameOver = false;
+                circle.css("bottom", "0");
+                gameStart();
+            }
+        });
+        </script>
+    <style>
+        #container {
+          position: absolute;
+          width: 700px;
+          height: 600px;
+          border: 1px black solid;
+          left: 500px;
+          top: 100px;
+        }
+        #circle {
+          position: absolute;
+          left: 40px;
+          width: 60px;
+          bottom: 0px;
+          border: 1px;
+        }
+        #enemy{
+            position: absolute;
+            width: 50px;
+            right: 0px;
+            bottom: 0px; 
+        }
+
+      </style>
+</head>
+<body>
+    <div id="container">
+        <img id="circle" src="images/동그라미.jpg" alt="" />
+        <img id="enemy" src="images/미사일.jpg" alt="" />
+    </div>
+</body>
+</html>

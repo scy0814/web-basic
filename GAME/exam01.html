@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.js"
+      integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+      crossorigin="anonymous"
+    ></script>
+    <style>
+      #container {
+        position: absolute;
+        width: 700px;
+        height: 600px;
+        border: 1px black solid;
+        left: 500px;
+        top: 100px;
+      }
+      #circle {
+        position: absolute;
+        width: 60px;
+        top: 100px;
+        border: 1px;
+        display: none;
+      }
+    </style>
+    <script>
+      $(function () {
+        const circle = $("#circle");
+        let count = 3;
+        gameStart();
+
+        //키보드 이벤트 정의
+        $("html").keydown(function (e) {
+          switch (e.key) {
+            case "ArrowRight":
+              moveRight();
+              break;
+            case "ArrowLeft":
+              moveLeft();
+            case "ArrowUp":
+              moveUp();
+            case "ArrowDown":
+              moveDown();
+              break;
+          }
+          console.log(e.key);
+        });
+        function gameStart() {
+          countDown();
+          setTimeout(function () {
+            circle.show();
+          }, 3000);
+        }
+
+        function countDown() {
+          let timer = setInterval(function () {
+            console.log(count--);
+            if (count < 0) {
+              clearInterval(timer);
+            }
+          }, 1000);
+        }
+
+        function moveRight() {
+          const circleRightMargin = $("#circle").css("right").replace("px", "");
+          if (circleRightMargin >= 10) {
+            circle.animate({ left: "+=10px" }, 0);
+          }
+        }
+        function moveLeft() {
+          const circleleftMargin = $("#circle").css("left").replace("px", "");
+          if (circleleftMargin >= 10) {
+            circle.animate({ left: "-=10px" }, 0);
+          }
+        }
+        function moveUp() {
+          const circleUpMargin = $("#circle").css("up").replace("px", "");
+          if (circleUpMargin >= 0) {
+            circle.animate({ up: "+=10px" }, 0);
+          }
+        }
+        function moveDown() {
+          const circleDownMargin = $("#circle").css("down").replace("px", "");
+          if (circleDownMargin >= 10) {
+            circle.animate({ down: "-=10px" }, 0);
+          }
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <div id="container">
+      <img id="circle" src="images/동그라미.jpg" alt="" />
+    </div>
+  </body>
+</html>
