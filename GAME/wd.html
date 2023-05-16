@@ -1,179 +1,302 @@
-
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.js"
+      integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(function () {
+        const player = $("#player");
+        const triangle = $("#triangle");
+        const triangle2 = $("#triangle2");
+        const scoreElement = $("#score");
+        let isJumping = false;
+        let rotationCount = 0;
+        let jumpCount = 0;
+        let isGameOver = false;
+        let gameInterval;
+        let obstaclePassed = false;
+        let timerInterval;
+        let speed = 1000;
+        const startTime = Date.now();
+        const timerElement = $("#timer");
+        timerInterval = setInterval(updateTimer, 1000);
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
-    crossorigin="anonymous"></script>
-  <style>
-    #container {
-      position: absolute;
-      width: 700px;
-      height: 150px;
-      border: 1px black solid;
-    }
-
-    .sliding-background {
-      z-index: -100;
-      position: absolute;
-      background: url('images/bg.jpg');
-      width: 200%;
-      height: 100%;
-      animation: slide 10s linear infinite;
-    }
-
-    @keyframes slide {
-      from {
-        transform: translate(0, 0);
-      }
-
-      to {
-        transform: translate(-500px, 0);
-      }
-    }
-
-    #hero {
-      position: absolute;
-      left: 20px;
-      bottom: 0px;
-      width: 50px;
-      height: 50px;
-      border: 1px solid;
-    }
-
-    #enemy {
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      transform: scaleX(-1);
-      right: 0px;
-      bottom: 0px;
-    }
-
-    #score {
-      float: right;
-    }
-  </style>
-
-  <script>
-    const ENEMY_SPEED_MIN_EASY = 1000;
-    const ENEMY_SPEED_MAX_EASY = 3000;
-
-    const ENEMY_SPEED_MIN_HARD = 500;
-    const ENEMY_SPEED_MAX_HARD = 1000;
-
-    $(function () {
-      const hero = $('#hero');
-      const enemy = $('#enemy');
-
-      // 점프 중인지?
-      let isJumping = false;
-      let score = 0;
-
-      gameStart();
-
-      function gameStart() {
-        // $('#gameover_screen').hide();
-
-        setKeyboardEvent();
-        enemyStart();
-
-        checkGameOver();
-      }
-
-      function isColliding(el1, el2) {
-        const rect1 = el1.getBoundingClientRect();
-        const rect2 = el2.getBoundingClientRect();
-
-        return !(
-          rect1.bottom < rect2.top ||
-          rect1.top > rect2.bottom ||
-          rect1.right < rect2.left ||
-          rect1.left > rect2.right
-        );
-      }
-
-      function checkGameOver() {
-        setInterval(function () {
-          if (isColliding(hero[0], enemy[0])) {
-            hero.stop();
-            enemy.stop();
-          }
-
-        }, 1000 / 60);
-      }
-
-      function getRandomNumber(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
-
-      function enemyStart() {
-        // 속도 조절
-        const speed = getRandomNumber(1000, 3000);
-
-        // 적이 오른쪽에서 왼쪽으로 이동
-        enemy.animate(
-          { right: '350px' },
-          speed,
-          'linear',
-          function () {
-            // 점수 올리자
-            score += 100;
-            updateScore(score);
-
-            // 적 리셋
-            enemy.css('right', '-50px');
-            enemyStart();
-          });
-      }
-
-      function updateScore(score) {
-        $('#score').text(score);
-      }
-
-      function jump() {
-        isJumping = true;
-        hero.animate({ bottom: '+=50px' })
-          .animate({ bottom: '-=50px' }, function () {
-            isJumping = false;
-          });
-      }
-
-      // 키보드 이벤트 정의
-      function setKeyboardEvent() {
-        $('html').keydown(function (e) {
-          switch (e.key) {
-            case ' ':
-              if (!isJumping) {
-                jump();
-              }
-              break;
-          }
-          // console.log(e.key);
+        // 타이머 업데이트 함수
+        function updateTimer() {
+          const elapsedTime = Math.floor((Date.now() - startTime) / 1000); // 경과 시간(초) 계산
+          timerElement.text("TIME: " + elapsedTime + "S");
+        }
+        $("#replay").click(function () {
+          resetGame();
         });
+
+        gameStart();
+
+        // 게임 시작 함수
+        function gameStart() {
+          updateTimer();
+          setKeyboardEvent();
+          setInterval(triangleStart, 2500);
+          setInterval(triangleStart2, 900);
+          checkCollision();
+        }
+
+        // 게임 정지 함수
+        function stopGame() {
+          clearInterval(gameInterval);
+          clearInterval(timerInterval);
+          updateGameOverInfo();
+        }
+        function updateGameOverInfo() {
+          const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+          const jumpCountElement = $("#jump h1");
+          const timerElement = $("#endTime h1");
+
+          timerElement.text("TIME: " + elapsedTime + "S");
+          jumpCountElement.text("JUMP: " + jumpCount);
+        }
+
+        // 적 이동 함수
+        function triangleStart() {
+          triangle.animate({ right: "1120px" }, speed, function () {
+            triangle.css("right", "-100px");
+          });
+        }
+        function triangleStart2() {
+          triangle2.animate({ right: "1120px" }, speed, function () {
+            triangle2.css("right", "-120px");
+          });
+        }
+
+        // 점프 함수
+        function jump() {
+          if (isJumping) return;
+          isJumping = true;
+          rotationCount++;
+          const targetRotation = rotationCount * 180;
+
+          player.animate(
+            { bottom: "+=70px" },
+            {
+              duration: 200,
+              step: function (now) {
+                $(this).css({
+                  transform: `rotate(${now + targetRotation}deg)`,
+                });
+              },
+              complete: function () {
+                player.animate(
+                  { bottom: "-=70px" },
+                  {
+                    duration: 250,
+                    step: function (now) {
+                      $(this).css({
+                        transform: `rotate(${targetRotation - now}deg)`,
+                      });
+                    },
+                    complete: function () {
+                      isJumping = false;
+                      player.css({ transform: `rotate(${targetRotation}deg)` });
+                    },
+                  }
+                );
+              },
+            }
+          );
+        }
+
+        // 스페이스바 점프 이벤트 설정
+        function setKeyboardEvent() {
+          $(document).keydown(function (e) {
+            if (e.key === " ") {
+              jump();
+              jumpCount++;
+              console.log(jumpCount);
+            }
+          });
+          $("#replay").click(function () {
+            resetGame();
+          });
+        }
+
+        // 충돌 검사 함수
+        function checkCollision() {
+          gameInterval = setInterval(function () {
+            const playerPosition = player.position();
+            const trianglePosition = triangle.position();
+            const triangle2Position = triangle2.position();
+            const playerWidth = player.width();
+            const triangleWidth = triangle.width();
+            const triangleHeight = triangle.height();
+
+            if (
+              (playerPosition.left + playerWidth >= trianglePosition.left &&
+                playerPosition.left <= trianglePosition.left + triangleWidth &&
+                playerPosition.top + playerWidth >= trianglePosition.top &&
+                playerPosition.top <= trianglePosition.top + triangleHeight) ||
+              (playerPosition.left + playerWidth >= triangle2Position.left &&
+                playerPosition.left <= triangle2Position.left + triangleWidth &&
+                playerPosition.top + playerWidth >= triangle2Position.top &&
+                playerPosition.top <= triangle2Position.top + triangleHeight)
+            ) {
+              clearInterval(gameInterval);
+              isGameOver = true;
+              $("#gameover_screen").show();
+              $("#replay").show();
+              $("#gameover").show();
+              stopGame();
+            } else if (
+              playerPosition.left > trianglePosition.left + triangleWidth &&
+              playerPosition.left > triangle2Position.left + triangleWidth &&
+              !obstaclePassed
+            ) {
+              obstaclePassed = true;
+            } else if (
+              playerPosition.left < trianglePosition.left &&
+              playerPosition.left < triangle2Position.left
+            ) {
+              obstaclePassed = false;
+            }
+          }, 10);
+        }
+        function resetGame() {
+          location.reload();
+        }
+      });
+    </script>
+    <style>
+      #container {
+        position: relative;
+        width: 880px;
+        height: 600px;
+        border: 1px black solid;
+        margin: 100px auto;
+        overflow: hidden;
+        left: 100px;
+        top: 100px;
       }
-    });
-  </script>
-</head>
+      #bottom-background {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        width: 1760px;
+        height: 100px;
+        z-index: -90;
+        background: url("images/bottom.jpg");
+        animation: slide 1.5s linear infinite;
+      }
+      @keyframes slide {
+        from {
+          transform: translateX(0);
+        }
 
-<body>
-  <div id="container">
-    <div class="sliding-background"></div>
-    <img id="hero" src="images/pompom.png" alt="">
+        to {
+          transform: translateX(-800px);
+        }
+      }
+      #middle-background {
+        position: absolute;
+        top: 0px;
+        height: 100%;
+        z-index: -100;
+      }
+      #player {
+        position: absolute;
+        bottom: 100px;
+        left: 150px;
+        z-index: -90;
+      }
 
-    <img id="enemy" src="images/enemy.png" alt="">
+      #triangle {
+        position: absolute;
+        right: -100px;
+        bottom: 95px;
+        width: 35px;
+        height: 32px;
+      }
+      #triangle2 {
+        filter: brightness(10);
+        position: absolute;
+        right: -120px;
+        bottom: 95px;
+        width: 35px;
+        height: 32px;
+      }
 
-    <div id="gameover_screen">
-      Game Over
-      <input type="button" value="재시작">
+      #gameover_screen {
+        background-color: rgba(48, 45, 45, 0.747);
+        width: 1000px;
+        height: 1000px;
+        top: 0px;
+        bottom: 0px;
+        position: absolute;
+        display: none;
+        z-index: -80;
+        
+      }
+      #gameover {
+        position: absolute;
+        color: white;
+        font-size: xx-large;
+        top: 80px;
+        left: 240px;
+        display: none;
+        z-index: -80;
+      }
+      #timer {
+        color: white;
+        z-index: -100;
+      }
+      #replay {
+        position: absolute;
+        top: 350px;
+        left: 360px;
+        display: none;
+      }
+      #endTime, #jump {
+        color: white;
+    position: relative;
+    top: 200px;
+    left:370px;
+  }
+    .myInfo{
+      position: relative;
+      color: blanchedalmond;
+      top: 370px;
+      left: 15px;
+      
+  }
+
+    </style>
+  </head>
+  <body>
+    <img id="start" src="images/start.png" alt="">
+    <div id="container">
+      <div class="background"></div>
+      <div class="sliding-background"></div>
+      <img id="bottom-background" src="images/bottom.jpg" alt="" />
+      <img id="middle-background" src="images/all.jpg" alt="" />
+      <img id="player" src="images/player.jpg" alt="" />
+      <img id="triangle" class="huddle" src="images/huddle.png" alt="" />
+      <img id="triangle2" class="huddle" src="images/huddle.png" alt="" />
+      <img id="replay" class="replay" src="images/replay.png" alt="" />
+      <h3 id="timer">TIME: 0S</h3>
+      <div id="gameover_screen">
+        <div id="endTime" class="info"><h1>TIME:</h1></div>
+        <div id="jump" class="info"><h1>JUMP:</h1></div>
+        <div id="gameover" class="info"><h1>GAME OVER</h1></div>
+        <h3 class="myInfo">이름: 송창열</h3>
+        <h3 class="myInfo">이메일:cyzzang963@naver.com</h3>
+      </div>
+
+      <!-- <div id="score">점수 : 0</div> -->
     </div>
-
-    <div id="score">0</div>
-  </div>
-</body>
-
+  </body>
 </html>
